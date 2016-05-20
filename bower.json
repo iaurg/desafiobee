@@ -1,0 +1,12 @@
+{
+  "name": "desafio",
+  "version": "1.0.0",
+  "dependencies": {
+    "bootstrap": "latest",
+    "font-awesome": "latest",
+    "animate.css": "latest",
+    "angular": "latest",
+    "angular-ui-router": "^0.3.0",
+    "restangular": "^1.5.2"
+  }
+}
