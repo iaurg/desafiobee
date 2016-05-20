@@ -4,19 +4,13 @@
   angular
     .module('DesafioBee')
     .config(function($stateProvider, $urlRouterProvider, $locationProvider) {
-      $urlRouterProvider.otherwise('/home');
+      $urlRouterProvider.otherwise('/login');
 
       $stateProvider
-        .state('home', {
-          url: '/home',
-          templateUrl: 'views/home.html',
-          controller: 'MainController as Home'
-        })
-
-        .state('messages', {
-          url: '/messages',
-          templateUrl: 'views/messages.html',
-          controller: 'MessageController as Message'
+        .state('login', {
+          url: '/login',
+          templateUrl: 'views/login.html',
+          controller: 'LoginController as Login'
         });
 
       $locationProvider.html5Mode(true);

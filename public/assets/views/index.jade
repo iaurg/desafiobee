@@ -1,0 +1,19 @@
+doctype html
+html(lang='pt')
+  head
+    meta(charset='UTF-8')
+    title Desafio Bee
+    base(href='/')
+
+    // bower:css
+    // endbower
+
+    link(rel='stylesheet', href='../libs/font-awesome/css/font-awesome.min.css')
+    link(rel='stylesheet', href='../build/app.min.css')
+  body(ng-app='DesafioBee')
+    div(ui-view='')
+
+    // bower:js
+    // endbower
+
+    script(src='../build/app.min.js')

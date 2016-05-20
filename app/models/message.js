@@ -1,5 +1,13 @@
-var mongoose = require('mongoose');
-
-module.exports = mongoose.model('Message', {
-    message: {type : String, default: ''}
-});
+'use strict';
+module.exports = function(sequelize, DataTypes) {
+  var Message = sequelize.define('Message', {
+    message: DataTypes.TEXT
+  }, {
+    classMethods: {
+      associate: function(models) {
+        // associations can be defined here
+      }
+    }
+  });
+  return Message;
+};

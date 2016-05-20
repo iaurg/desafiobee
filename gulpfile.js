@@ -8,12 +8,23 @@ var ngmin      = require('gulp-ngmin');
 var sourcemaps = require('gulp-sourcemaps');
 var notify     = require('gulp-notify');
 var wiredep    = require('wiredep').stream;
+var rename     = require('gulp-rename');
+var jade       = require('gulp-jade');
+var del        = require('del');
 
+/**
+ * Assets paths
+ * @type {Object}
+ */
 var paths = {
   styles: ['./public/assets/scss/**/*.scss'],
-  scripts: ['./public/assets/js/**/*.js']
+  scripts: ['./public/assets/js/**/*.js'],
+  templates: ['./public/assets/views/**/*.jade']
 };
 
+/**
+ * Compile styles
+ */
 gulp.task('styles', function() {
   gulp.src(paths.styles)
     .pipe(sourcemaps.init())
@@ -25,6 +36,9 @@ gulp.task('styles', function() {
     .pipe(notify("CSS generated!"));
 });
 
+/**
+ * Compile scripts
+ */
 gulp.task('scripts', function() {
   gulp.src(paths.scripts)
     .pipe(sourcemaps.init())
@@ -37,14 +51,30 @@ gulp.task('scripts', function() {
     .pipe(notify("JS generated!"));
 });
 
-gulp.task('inject', function() {
-  gulp.src('./public/views/index.html')
-    .pipe(wiredep())
+/**
+ * Compile JADE templates and inject bower dependencies
+ */
+gulp.task('templates', ['clean'], function() {
+  gulp.src(paths.templates, {base: './public/assets/views'})
+    .pipe(jade({pretty: true}))
+    .pipe(wiredep({
+      'ignorePath': '../'
+    }))
     .pipe(gulp.dest('./public/views'));
 });
 
+/**
+ * Clean views folder
+ */
+gulp.task('clean', function() {
+  return del.sync('./public/views');
+});
+
+/**
+ * Watch for changes
+ */
 gulp.task('watch', function() {
   gulp.watch(paths.styles, ['styles']);
   gulp.watch(paths.scripts, ['scripts']);
-  gulp.watch(['./public/libs'], ['inject']);
+  gulp.watch(paths.templates, ['templates']);
 });

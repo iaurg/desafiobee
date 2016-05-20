@@ -1,3 +1,4 @@
 node_modules/
 public/libs/
-public/build/*
+public/build/
+public/views/

@@ -2,9 +2,8 @@
   'use strict';
 
   angular.module('DesafioBee')
-    .controller('MessageController', function MessageCtrl() {
+    .controller('MessageController', function() {
       var vm = this;
 
-      vm.tagline = 'Hello World! :D';
     });
 })();

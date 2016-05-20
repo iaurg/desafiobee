@@ -1,16 +1,56 @@
-var Message = require('./models/message');
+var models = require('./models/index');
 
-module.exports = function(app) {
-    app.get('/api/messages', function(req, res) {
-        Message.find(function(err, messages) {
-            if (err)
-                res.send(err);
+module.exports = function(router) {
 
+    router.route('/messages')
+        .get(function(req, res) {
+          models.Message.findAll({}).then(function(messages) {
             res.json(messages);
-        });
-    });
+          });
+        })
 
-    app.get('*', function(req, res) {
-        res.sendfile('./public/views/index.html');
-    });
+        .post(function(req, res) {
+          models.Message.create({
+            message: req.body.message
+          }).then(function(message) {
+            res.json(message);
+          });
+        });
+
+    router.route('/messages/:id')
+        .get(function(req, res) {
+          models.Message.find({
+            where: {
+              id: req.params.id
+            }
+          }).then(function(message) {
+            res.json(message);
+          });
+        })
+
+        .put(function(req, res) {
+          models.Message.find({
+            where: {
+              id: req.params.id
+            }
+          }).then(function(message) {
+            if(message){
+              message.updateAttributes({
+                message: req.body.message,
+              }).then(function(message) {
+                res.send(message);
+              });
+            }
+          });
+        })
+
+        .delete(function(req, res) {
+          models.Message.destroy({
+            where: {
+              id: req.params.id
+            }
+          }).then(function(message) {
+            res.json(message);
+          });
+        });
 };
