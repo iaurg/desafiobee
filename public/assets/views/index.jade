@@ -2,16 +2,20 @@ doctype html
 html(lang='pt')
   head
     meta(charset='UTF-8')
-    title Desafio Bee
+    title BeeChat
     base(href='/')
 
     // bower:css
     // endbower
 
+    link(rel='stylesheet', href='https://fonts.googleapis.com/css?family=Open+Sans:400,700')
     link(rel='stylesheet', href='../libs/font-awesome/css/font-awesome.min.css')
     link(rel='stylesheet', href='../build/app.min.css')
   body(ng-app='DesafioBee')
     div(ui-view='')
+    toaster-container(toaster-options="{'close-button': true, 'position-class': 'toast-bottom-right'}")
+
+    script(src='socket.io/socket.io.js')
 
     // bower:js
     // endbower

@@ -1,4 +1,32 @@
+@import 'reset';
+@import 'variables';
+@import 'structure';
+@import 'login';
+
 body {
-  padding: 0;
-  margin: 0;
+  background: lighten($main-color, 4%);
+  font: 12px "Open Sans", "Helvetica", "Arial", sans-serif;
+}
+
+.form-group {
+  i {
+    width: 14px;
+  }
+
+  .form-control {
+    height: 46px;
+    line-height: 46px;
+    font-size: 12px;
+
+    &.input-sm {
+      height: 30px;
+    }
+  }
+}
+
+.btn {
+  text-transform: uppercase;
+  font-size: 12px;
+  font-weight: bold;
+  padding: 15px 0;
 }

@@ -1,56 +1,151 @@
-var models = require('./models/index');
+var models       = require('./models/index');
+var jwt          = require('jsonwebtoken');
+var passwordHash = require('password-hash');
+var parse        = require('parse-bearer-token');
 
-module.exports = function(router) {
+module.exports = function(app, router, io) {
 
-    router.route('/messages')
-        .get(function(req, res) {
-          models.Message.findAll({}).then(function(messages) {
-            res.json(messages);
+  /**
+   * Authenticate
+   */
+  router.post('/authenticate', function(req, res) {
+    models.User.find({
+      where: {
+        username: req.body.username
+      }
+    }).then(function(user) {
+      if (!user) {
+        res.json({ error: true, message: 'Usuário não encontrado.' });
+      } else if (user) {
+        if (!passwordHash.verify(req.body.password, user.password)) {
+          res.json({ error: true, message: 'Senha incorreta.' });
+        } else {
+          var token = jwt.sign(user.toJSON(), app.get('jwtSecret'), {
+            expiresIn: '1d'
           });
-        })
 
-        .post(function(req, res) {
-          models.Message.create({
-            message: req.body.message
-          }).then(function(message) {
-            res.json(message);
+          res.json({
+            success: true,
+            user: user,
+            token: token
           });
+        }
+      }
+    });
+  });
+
+  router.get('/authenticate/user', function(req, res) {
+    var token = parse(req);
+
+    if (token) {
+      jwt.verify(token, app.get('jwtSecret'), function(err, decoded) {
+        if (err) {
+          return res.status(403).json({ error: true });
+        } else {
+          var user = decoded;
+          delete user.iat;
+          delete user.exp;
+
+          return res.json({user: user});
+        }
+      });
+    } else {
+      return res.status(403).json({ error: true });
+    }
+  });
+
+  /**
+   * New user
+   */
+  router.route('/users')
+    .post(function(req, res) {
+      models.User.create({
+        name: req.body.name,
+        username: req.body.username,
+        password: passwordHash.generate(req.body.password),
+        createdAt: new Date(),
+        updatedAt: new Date()
+      }).then(function(user) {
+        res.json(user);
+      }).catch(function (err) {
+        if (err.statusCode) {
+          res.status(err.statusCode);
+        } else {
+          res.status(500);
+        }
+        res.json({'error': true, message: 'Esse usuário já existe'});
+      });
+    });
+
+  /**
+   * JWT Middleware
+   */
+  router.use(function(req, res, next) {
+    var token = parse(req);
+
+    if (token) {
+      jwt.verify(token, app.get('jwtSecret'), function(err, decoded) {
+        if (err) {
+          return res.status(403).json({ error: true });
+        } else {
+          req.decoded = decoded;
+          next();
+        }
+      });
+    } else {
+      return res.status(403).json({ error: true });
+    }
+  });
+
+  router.route('/messages')
+    .get(function(req, res) {
+      models.Message.findAll({}).then(function(messages) {
+        res.json(messages);
+      });
+    })
+
+    .post(function(req, res) {
+      models.Message.create({
+        message: req.body.message,
+        ChannelId: req.body.channelId,
+        UserId: req.body.userId
+      }).then(function(message) {
+        models.Message.findById(message.id, { include: [{ model: models.User, attributes: ['name'] }] }).then(function(message) {
+          res.json(message);
+          io.sockets.emit('message', message);
         });
+      });
+    });
 
-    router.route('/messages/:id')
-        .get(function(req, res) {
-          models.Message.find({
-            where: {
-              id: req.params.id
-            }
-          }).then(function(message) {
-            res.json(message);
-          });
-        })
+  router.route('/channels')
+    .get(function(req, res) {
+      models.Channel.findAll({}).then(function(channels) {
+        res.json(channels);
+      });
+    })
 
-        .put(function(req, res) {
-          models.Message.find({
-            where: {
-              id: req.params.id
-            }
-          }).then(function(message) {
-            if(message){
-              message.updateAttributes({
-                message: req.body.message,
-              }).then(function(message) {
-                res.send(message);
-              });
-            }
-          });
-        })
-
-        .delete(function(req, res) {
-          models.Message.destroy({
-            where: {
-              id: req.params.id
-            }
-          }).then(function(message) {
-            res.json(message);
-          });
+    .post(function(req, res) {
+      models.Channel.create({
+        name: req.body.name
+      }).then(function(channel) {
+        res.json(channel);
+        io.sockets.emit('channel', channel);
+      }).catch(function (err) {
+        if (err.statusCode) {
+          res.status(err.statusCode);
+        } else {
+          res.status(500);
+        }
+        res.json({'error': true, message: 'Esse canal já existe'});
+      });
+    });
+  router.route('/channels/:id/messages')
+    .get(function(req, res) {
+      models.Channel.findById(req.params.id).then(function(channel) {
+        channel.getMessages({ order: ['createdAt'], include: [{ model: models.User, attributes: ['name'] }] }).then(function(messages) {
+          res.json(messages);
         });
+      });
+    });
+
 };

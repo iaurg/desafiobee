@@ -1,11 +1,14 @@
 'use strict';
 module.exports = function(sequelize, DataTypes) {
   var Message = sequelize.define('Message', {
-    message: DataTypes.TEXT
+    message: DataTypes.STRING,
+    UserId: DataTypes.INTEGER,
+    ChannelId: DataTypes.INTEGER
   }, {
     classMethods: {
       associate: function(models) {
-        // associations can be defined here
+        Message.belongsTo(models.User);
+        Message.belongsTo(models.Channel);
       }
     }
   });

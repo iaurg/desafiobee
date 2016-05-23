@@ -1,0 +1,22 @@
+#login-container
+  .login-box
+    h1
+      i.fa.fa-comments-o
+      span BeeChat
+    form(ng-submit='Cadastro.cadastro()', novalidate='novalidate')
+      .form-group
+        input#name.form-control(ng-model='Cadastro.cadastroData.name', type='text', placeholder='Digite seu nome', required)
+      .form-group
+        .input-group
+          span.input-group-addon
+            i.fa.fa-user
+          input#username.form-control(ng-model='Cadastro.cadastroData.username', type='text', placeholder='Digite seu usuário', required)
+      .form-group
+        .input-group
+          span.input-group-addon
+            i.fa.fa-lock
+          input#password.form-control(ng-model='Cadastro.cadastroData.password', type='password', placeholder='Digite sua senha', required)
+      button.btn.btn-lg.btn-block.btn-success Cadastrar
+      p.text-center.cadastro-link
+        a(ui-sref='login') Já tenho conta
+

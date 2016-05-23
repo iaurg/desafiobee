@@ -26,7 +26,7 @@ var paths = {
  * Compile styles
  */
 gulp.task('styles', function() {
-  gulp.src(paths.styles)
+  gulp.src('./public/assets/scss/app.scss')
     .pipe(sourcemaps.init())
     .pipe(sass().on('error', sass.logError))
     .pipe(concat('app.min.css'))

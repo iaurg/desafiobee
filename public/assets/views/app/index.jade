@@ -1,0 +1,63 @@
+#wrapper
+  .sideBar
+    .sideBar__section
+      //- Logged user information
+      .sidebar__user_info
+        h5(ng-bind='::currentUser.name')
+        p(ng-bind='::currentUser.username')
+
+    div.sideBar__channels(ng-controller='ChannelController as Channel')
+      //- Channel list
+      a.sideBar__item(
+        ng-repeat='channel in Channel.channels',
+        ng-if='!Channel.loading',
+        ng-click='Index.selectChannel(channel)',
+        ng-class='{"is-side-bar-item-selected": channel.id == selectedChannel.id}'
+      )
+        span(ng-class='{bold: channel.newMessage}', ng-bind='"#" + channel.name')
+      .sideBar__item(ng-if='Channel.loading')
+        i.fa.fa-refresh.fa-spin
+        span &nbsp;Carregando...
+
+      //- New channel form
+      form.newChannel(name='Channel.formChannel', ng-submit='Channel.submit()', novalidate='novalidate')
+        .form-group
+          .input-group.input-group-sm
+            input.form-control.input-sm(ng-model='Channel.newChannel.name', placeholder='Criar uma nova sala', required)
+            span.input-group-btn
+              button.btn.btn-primary
+                i.fa.fa-plus
+
+    //- Logout
+    .sideBar__section.sideBar__section_bottom
+      .sideBar__item.sideBar__button
+        button.btn.btn-danger.btn-block(ng-click='App.logout()')
+          i.fa.fa-sign-out
+          span Sair
+
+  //- Chat view
+  .content(ng-if='selectedChannel')
+    //- Channel title
+    .content__title(ng-bind='"#" + selectedChannel.name')
+
+    //- Chat messages
+    .content__chat(scroll-glue='true')
+      ul.messages(ng-if='!Index.loadingMessages')
+        li(ng-repeat='message in Index.messages', ng-class='{"messages__message_received": message.UserId != currentUser.id, "messages__message_sent": message.UserId == currentUser.id}')
+          p(ng-bind='message.User.name')
+          span(ng-bind='message.message')
+
+      .loading(ng-if='Index.loadingMessages')
+        i.fa.fa-refresh.fa-spin
+
+    //- New message form
+    .content__message
+      form(name='Index.formNewMessage', ng-submit='Index.sendMessage()', novalidate='novalidate')
+        .form-group
+          input#message.form-control(ng-model='Index.newMessage.message', placeholder='Digite sua mensagem aqui', required, disable-validation-message)
+
+  //- No channel selected
+  .content(ng-if='!selectedChannel')
+    .nochannel
+      i.fa.fa-comments-o
+      span Selecione uma sala
