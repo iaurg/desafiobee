@@ -4,6 +4,7 @@
   "author": "Diego Schell Fernandes <diego.schell.f@gmail.com>",
   "dependencies": {
     "body-parser": "~1.4.2",
+    "bower": "^1.7.9",
     "express": "~4.5.1",
     "jsonwebtoken": "^7.0.0",
     "method-override": "~2.0.2",
@@ -35,5 +36,8 @@
     "jasmine": "^2.4.1",
     "jshint": "^2.9.2",
     "protractor": "^3.3.0"
+  },
+  "scripts": {
+    "postinstall": "./node_modules/bower/bin/bower install"
   }
 }

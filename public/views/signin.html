@@ -1,0 +1,20 @@
+
+<div id="login-container">
+  <div class="login-box">
+    <h1><i class="fa fa-comments-o"></i><span>BeeChat</span></h1>
+    <form ng-submit="SignIn.login()" novalidate="novalidate">
+      <div class="form-group">
+        <div class="input-group"><span class="input-group-addon"><i class="fa fa-user"></i></span>
+          <input id="username" ng-model="SignIn.loginData.username" type="text" placeholder="Digite seu usuário" required="required" class="form-control"/>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="input-group"><span class="input-group-addon"><i class="fa fa-lock"></i></span>
+          <input id="password" ng-model="SignIn.loginData.password" type="password" placeholder="Digite sua senha" required="required" class="form-control"/>
+        </div>
+      </div>
+      <button class="btn btn-lg btn-block btn-success">Entrar</button>
+      <p class="text-center cadastro-link"><a ui-sref="signup">Sou novo usuário</a></p>
+    </form>
+  </div>
+</div>

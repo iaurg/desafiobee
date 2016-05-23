@@ -1,0 +1,48 @@
+
+<div id="wrapper">
+  <div class="sideBar">
+    <div class="sideBar__section">
+      <div class="sidebar__user_info">
+        <h5 ng-bind="::currentUser.name"></h5>
+        <p ng-bind="::currentUser.username"></p>
+      </div>
+    </div>
+    <div ng-controller="ChannelController as Channel" class="sideBar__channels"><a ng-repeat="channel in Channel.channels" ng-if="!Channel.loading" ng-click="Index.selectChannel(channel)" ng-class="{&quot;is-side-bar-item-selected&quot;: channel.id == selectedChannel.id}" class="sideBar__item"><span ng-class="{bold: channel.newMessage}" ng-bind="&quot;#&quot; + channel.name"></span></a>
+      <div ng-if="Channel.loading" class="sideBar__item"><i class="fa fa-refresh fa-spin"></i><span>&nbsp;Carregando...</span></div>
+      <form name="Channel.formChannel" ng-submit="Channel.submit()" novalidate="novalidate" class="newChannel">
+        <div class="form-group">
+          <div class="input-group input-group-sm">
+            <input ng-model="Channel.newChannel.name" placeholder="Criar uma nova sala" required="required" class="form-control input-sm"/><span class="input-group-btn">
+              <button class="btn btn-primary"><i class="fa fa-plus"></i></button></span>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="sideBar__section sideBar__section_bottom">
+      <div class="sideBar__item sideBar__button">
+        <button ng-click="App.logout()" class="btn btn-danger btn-block"><i class="fa fa-sign-out"></i><span>Sair</span></button>
+      </div>
+    </div>
+  </div>
+  <div ng-if="selectedChannel" class="content">
+    <div ng-bind="&quot;#&quot; + selectedChannel.name" class="content__title"></div>
+    <div scroll-glue="true" class="content__chat">
+      <ul ng-if="!Index.loadingMessages" class="messages">
+        <li ng-repeat="message in Index.messages" ng-class="{&quot;messages__message_received&quot;: message.UserId != currentUser.id, &quot;messages__message_sent&quot;: message.UserId == currentUser.id}">
+          <p ng-bind="message.User.name"></p><span ng-bind="message.message"></span>
+        </li>
+      </ul>
+      <div ng-if="Index.loadingMessages" class="loading"><i class="fa fa-refresh fa-spin"></i></div>
+    </div>
+    <div class="content__message">
+      <form name="Index.formNewMessage" ng-submit="Index.sendMessage()" novalidate="novalidate">
+        <div class="form-group">
+          <input id="message" ng-model="Index.newMessage.message" placeholder="Digite sua mensagem aqui" required="required" disable-validation-message="disable-validation-message" class="form-control"/>
+        </div>
+      </form>
+    </div>
+  </div>
+  <div ng-if="!selectedChannel" class="content">
+    <div class="nochannel"><i class="fa fa-comments-o"></i><span>Selecione uma sala</span></div>
+  </div>
+</div>
