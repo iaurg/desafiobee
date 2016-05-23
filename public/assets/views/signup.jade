@@ -3,19 +3,19 @@
     h1
       i.fa.fa-comments-o
       span BeeChat
-    form(ng-submit='SignUp.cadastro()', novalidate='novalidate')
+    form(ng-submit='SignUp.signup()', novalidate='novalidate')
       .form-group
-        input#name.form-control(ng-model='SignUp.cadastroData.name', type='text', placeholder='Digite seu nome', required)
+        input#name.form-control(ng-model='SignUp.userData.name', type='text', placeholder='Digite seu nome', required)
       .form-group
         .input-group
           span.input-group-addon
             i.fa.fa-user
-          input#username.form-control(ng-model='SignUp.cadastroData.username', type='text', placeholder='Digite seu usuário', required)
+          input#username.form-control(ng-model='SignUp.userData.username', type='text', placeholder='Digite seu usuário', required)
       .form-group
         .input-group
           span.input-group-addon
             i.fa.fa-lock
-          input#password.form-control(ng-model='SignUp.cadastroData.password', type='password', placeholder='Digite sua senha', required)
+          input#password.form-control(ng-model='SignUp.userData.password', type='password', placeholder='Digite sua senha', required)
       button.btn.btn-lg.btn-block.btn-success Cadastrar
       p.text-center.cadastro-link
         a(ui-sref='sigin') Já tenho conta

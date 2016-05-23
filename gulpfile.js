@@ -78,6 +78,11 @@ gulp.task('clean', function() {
 });
 
 /**
+ * Build dist folders
+ */
+gulp.task('build', ['styles', 'scripts', 'templates']);
+
+/**
  * Watch for changes
  */
 gulp.task('watch', function() {

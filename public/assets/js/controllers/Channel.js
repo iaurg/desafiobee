@@ -21,9 +21,7 @@
         }
       });
 
-      /**
-       * Load all channels
-       */
+      // Load channels
       vm.load = function() {
         vm.loading = true;
 
@@ -34,9 +32,7 @@
       };
       vm.load();
 
-      /**
-       * Create new channel
-       */
+      // Create channel
       vm.submit = function() {
         Restangular.one('/channels').customPOST(vm.newChannel).then(function() {
           vm.formChannel.$setPristine();

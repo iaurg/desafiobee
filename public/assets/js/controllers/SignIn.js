@@ -13,10 +13,8 @@
         focus('username');
       }
 
-      /**
-       * Login
-       */
-       vm.login = function() {
+      // Login
+      vm.login = function() {
         localStorage.setItem('lastUser', vm.loginData.username);
 
         $auth.login(vm.loginData).then(function(response) {

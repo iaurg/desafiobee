@@ -5,6 +5,7 @@
     .controller('AppController', function($state, $rootScope, $auth) {
       var vm = this;
 
+      // Logout
       vm.logout = function() {
         $auth.logout().then(function() {
           localStorage.removeItem('user');

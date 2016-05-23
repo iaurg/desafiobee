@@ -7,13 +7,11 @@
 
       focus('name');
 
-      /**
-       * Sign up
-       */
-      vm.cadastro = function() {
-        Restangular.one('/users').customPOST(vm.cadastroData).then(function() {
-          localStorage.setItem('lastUser', vm.cadastroData.username);
-          vm.cadastroData = {};
+      // Sign up
+      vm.signup = function() {
+        Restangular.one('/users').customPOST(vm.userData).then(function() {
+          localStorage.setItem('lastUser', vm.userData.username);
+          vm.userData = {};
           $state.go('signnin');
         }, function(response) {
           if (response.data.error === true) {
