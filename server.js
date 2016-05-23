@@ -7,7 +7,7 @@ var jwtConfig      = require('./config/jwt');
 var server         = require('http').Server(app);
 var io             = require('socket.io')(server);
 
-var port = process.env.PORT || 80;
+var port = process.env.PORT || 8080;
 
 app.set('jwtSecret', jwtConfig.secret);
 app.use(bodyParser.json());

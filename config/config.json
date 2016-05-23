@@ -2,7 +2,7 @@
   "development": {
     "username": "diegoschellfernandes",
     "password": "postgres",
-    "database": "desafiobee",
+    "database": "testee",
     "host": "127.0.0.1",
     "post": "5432",
     "dialect": "postgres"
