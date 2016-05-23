@@ -2,7 +2,7 @@
   'use strict';
 
   angular.module('DesafioBee')
-    .controller('LoginController', function($state, $auth, $rootScope, toaster, focus) {
+    .controller('SignInController', function($state, $auth, $rootScope, toaster, focus) {
       var vm = this;
       vm.loginData = {};
 

@@ -4,19 +4,19 @@
   angular
     .module('DesafioBee')
     .config(function($stateProvider, $urlRouterProvider, $locationProvider) {
-      $urlRouterProvider.otherwise('/login');
+      $urlRouterProvider.otherwise('/signin');
 
       $stateProvider
-        .state('login', {
-          url: '/login',
-          templateUrl: 'views/login.html',
-          controller: 'LoginController as Login'
+        .state('signin', {
+          url: '/signin',
+          templateUrl: 'views/signin.html',
+          controller: 'SignInController as SignIn'
         })
 
-        .state('cadastro', {
-          url: '/cadastro',
-          templateUrl: 'views/cadastro.html',
-          controller: 'CadastroController as Cadastro'
+        .state('signup', {
+          url: '/signup',
+          templateUrl: 'views/signup.html',
+          controller: 'SignUpController as SignUp'
         })
 
         .state('app', {

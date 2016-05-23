@@ -14,7 +14,7 @@
       socket.on('message', function(message) {
         if ($rootScope.selectedChannel === null || message.ChannelId !== $rootScope.selectedChannel.id) {
           angular.forEach(vm.channels, function(channel) {
-            if (channel.id == message.ChannelId) {
+            if (channel.id === message.ChannelId) {
               channel.newMessage = true;
             }
           });

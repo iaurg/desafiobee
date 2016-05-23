@@ -10,7 +10,7 @@
 
       // New message received from socket
       socket.on('message', function(message) {
-        if ($rootScope.selectedChannel !== null && message.ChannelId == $rootScope.selectedChannel.id) {
+        if ($rootScope.selectedChannel !== null && message.ChannelId === $rootScope.selectedChannel.id) {
           vm.messages.push(message);
         }
       });
@@ -28,7 +28,7 @@
 
       // Send message to channel
       vm.sendMessage = function() {
-        Restangular.one('/messages').customPOST(vm.newMessage).then(function(response) {
+        Restangular.one('/messages').customPOST(vm.newMessage).then(function() {
           vm.newMessage.message = '';
           vm.formNewMessage.$setPristine();
         });

@@ -41,7 +41,7 @@
             localStorage.removeItem('satellizer_token');
             $rootScope.currentUser   = null;
 
-            $state.go('login');
+            $state.go('signin');
           });
         }
     })
@@ -51,7 +51,7 @@
         var token = localStorage.getItem('satellizer_token');
         if (!token && next.name.includes('app')) {
           event.preventDefault();
-          $state.go('login');
+          $state.go('signin');
         }
       });
     })
@@ -73,7 +73,7 @@
           localStorage.removeItem('satellizer_token');
           $rootScope.currentUser   = null;
 
-          $state.go('login');
+          $state.go('signin');
 
           return false;
         }

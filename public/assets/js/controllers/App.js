@@ -11,7 +11,7 @@
           $rootScope.authenticated = false;
           $rootScope.currentUser = null;
 
-          $state.go('login');
+          $state.go('signin');
         });
       };
     });
