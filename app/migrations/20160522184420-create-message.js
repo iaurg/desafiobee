@@ -17,6 +17,9 @@ module.exports = {
       ChannelId: {
         type: Sequelize.INTEGER
       },
+      ToUserId: {
+        type: Sequelize.INTEGER
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

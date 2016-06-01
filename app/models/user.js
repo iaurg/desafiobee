@@ -4,7 +4,8 @@ module.exports = function(sequelize, DataTypes) {
   var User = sequelize.define('User', {
     name: DataTypes.STRING,
     username: { type: DataTypes.STRING, unique: true },
-    password: DataTypes.STRING
+    password: DataTypes.STRING,
+    grupo: DataTypes.STRING
   }, {
     instanceMethods: {
       toJSON: function () {

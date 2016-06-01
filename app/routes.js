@@ -2,8 +2,44 @@ var models       = require('./models/index');
 var jwt          = require('jsonwebtoken');
 var passwordHash = require('password-hash');
 var parse        = require('parse-bearer-token');
+var _            = require('lodash');
 
 module.exports = function(app, router, io) {
+
+  var socketList = [];
+
+  function onlineList() {
+    io.sockets.emit('online', _.transform(socketList, function(result, s) {
+      result.push(s.user.id);
+    }, []));
+  }
+
+  io.on('connection', function(socket){
+    socket.on('connection-user', function(user) {
+      socketList.push({
+        user: user,
+        socket: socket
+      });
+
+      onlineList();
+    });
+
+    socket.on('disconnect', function(){
+      _.remove(socketList, function(s) {
+        return s.socket.id === socket.id;
+      });
+
+      onlineList();
+    });
+
+    socket.on('manual-disconnect', function(userId){
+      _.remove(socketList, function(s) {
+        return s.user.id === userId;
+      });
+
+      onlineList();
+    });
+  });
 
   /**
    * Authenticate
@@ -58,6 +94,12 @@ module.exports = function(app, router, io) {
    * New user
    */
   router.route('/users')
+    .get(function(req, res) {
+      models.User.findAll({}).then(function(users) {
+        res.json(users);
+      });
+    })
+
     .post(function(req, res) {
       models.User.create({
         name: req.body.name,
@@ -108,11 +150,19 @@ module.exports = function(app, router, io) {
       models.Message.create({
         message: req.body.message,
         ChannelId: req.body.channelId,
-        UserId: req.body.userId
+        ToUserId: req.body.toUserId,
+        UserId: req.decoded.id
       }).then(function(message) {
         models.Message.findById(message.id, { include: [{ model: models.User, attributes: ['name'] }] }).then(function(message) {
           res.json(message);
-          io.sockets.emit('message', message);
+          if (message.ChannelId) {
+            io.sockets.emit('message', message);
+          } else {
+            var fromUser = _.find(socketList, function(s) { return s.user.id === req.decoded.id });
+            var toUser   = _.find(socketList, function(s) { return s.user.id === req.body.toUserId });
+            if (fromUser) fromUser.socket.emit('message', message);
+            if (toUser)   toUser.socket.emit('message', message);
+          }
         });
       });
     });
@@ -139,13 +189,35 @@ module.exports = function(app, router, io) {
         res.json({'error': true, message: 'Esse canal já existe'});
       });
     });
+
   router.route('/channels/:id/messages')
     .get(function(req, res) {
       models.Channel.findById(req.params.id).then(function(channel) {
-        channel.getMessages({ order: ['createdAt'], include: [{ model: models.User, attributes: ['name'] }] }).then(function(messages) {
+        channel.getMessages({ order: [['createdAt', 'DESC']], limit: 50, include: [{ model: models.User, attributes: ['name'] }] }).then(function(messages) {
           res.json(messages);
         });
       });
     });
 
+  router.route('/users/:id/messages')
+  .get(function(req, res) {
+    models.Message.findAll({
+      where: {
+        $or: [
+          {
+            UserId: req.params.id,
+            ToUserId: req.decoded.id
+          },
+          {
+            UserId: req.decoded.id,
+            ToUserId: req.params.id
+          }
+        ]
+      },
+      order: [['createdAt', 'DESC']],
+      limit: 50
+    }).then(function(messages) {
+      res.json(messages);
+    });
+  });
 };

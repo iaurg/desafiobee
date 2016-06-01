@@ -12,7 +12,7 @@
 
       // Display advice on channel list about new messages
       socket.on('message', function(message) {
-        if ($rootScope.selectedChannel === null || message.ChannelId !== $rootScope.selectedChannel.id) {
+        if (($rootScope.selectedChannel === null && !message.ToUserId) || (message.ChannelId && message.ChannelId !== $rootScope.selectedChannel.id)) {
           angular.forEach(vm.channels, function(channel) {
             if (channel.id === message.ChannelId) {
               channel.newMessage = true;

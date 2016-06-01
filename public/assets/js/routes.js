@@ -13,12 +13,6 @@
           controller: 'SignInController as SignIn'
         })
 
-        .state('signup', {
-          url: '/signup',
-          templateUrl: 'views/signup.html',
-          controller: 'SignUpController as SignUp'
-        })
-
         .state('app', {
           url: '/app',
           templateUrl: 'views/extend.html',

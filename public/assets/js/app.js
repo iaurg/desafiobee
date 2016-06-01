@@ -11,6 +11,7 @@
     'jcs-autoValidate',
     'static-include',
     'btford.socket-io',
-    'luegg.directives'
+    'luegg.directives',
+    'ngAudio'
   ]);
 })();

@@ -1,11 +1,11 @@
 {
   "development": {
-    "username": "diegoschellfernandes",
-    "password": "postgres",
-    "database": "testee",
+    "username": "root",
+    "password": "root",
+    "database": "carioca_chat",
     "host": "127.0.0.1",
-    "post": "5432",
-    "dialect": "postgres"
+    "port": "8889",
+    "dialect": "mysql"
   },
   "test": {
     "username": "root",

@@ -6,6 +6,7 @@ var router         = express.Router();
 var jwtConfig      = require('./config/jwt');
 var server         = require('http').Server(app);
 var io             = require('socket.io')(server);
+var _              = require('lodash');
 
 var port = process.env.PORT || 8080;
 

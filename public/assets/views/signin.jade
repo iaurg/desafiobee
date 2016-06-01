@@ -2,7 +2,7 @@
   .login-box
     h1
       i.fa.fa-comments-o
-      span BeeChat
+      span TucanoChat
     form(ng-submit='SignIn.login()', novalidate='novalidate')
       .form-group
         .input-group
@@ -15,6 +15,3 @@
             i.fa.fa-lock
           input#password.form-control(ng-model='SignIn.loginData.password', type='password', placeholder='Digite sua senha', required)
       button.btn.btn-lg.btn-block.btn-success Entrar
-      p.text-center.cadastro-link
-        a(ui-sref='signup') Sou novo usuário
-

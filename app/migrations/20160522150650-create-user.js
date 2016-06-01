@@ -9,13 +9,19 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       name: {
+        allowNull: false,
         type: Sequelize.STRING
       },
       username: {
+        allowNull: false,
         type: Sequelize.STRING,
         unique: true
       },
       password: {
+        allowNull: false,
+        type: Sequelize.STRING
+      },
+      grupo: {
         type: Sequelize.STRING
       },
       createdAt: {

@@ -6,27 +6,33 @@
         h5(ng-bind='::currentUser.name')
         p(ng-bind='::currentUser.username')
 
-    div.sideBar__channels(ng-controller='ChannelController as Channel')
-      //- Channel list
-      a.sideBar__item(
-        ng-repeat='channel in Channel.channels',
-        ng-if='!Channel.loading',
-        ng-click='Index.selectChannel(channel)',
-        ng-class='{"is-side-bar-item-selected": channel.id == selectedChannel.id}'
-      )
-        span(ng-class='{bold: channel.newMessage}', ng-bind='"#" + channel.name')
-      .sideBar__item(ng-if='Channel.loading')
-        i.fa.fa-refresh.fa-spin
-        span &nbsp;Carregando...
+    div.sideBar__channels
+      div(ng-controller='ChannelController as Channel', ng-if='Channel.channels.indexOf(currentUser.grupo) !== false')
+        //- Channel list
+        a.sideBar__item(
+          ng-repeat='channel in Channel.channels',
+          ng-if='!Channel.loading && (channel.name === currentUser.grupo || currentUser.grupo === "admin")',
+          ng-click='Index.selectChannel(channel)',
+          ng-class='{"is-side-bar-item-selected": channel.id == selectedChannel.id}'
+        )
+          span(ng-class='{bold: channel.newMessage}', ng-bind='"#" + channel.name')
+        .sideBar__item(ng-if='Channel.loading')
+          i.fa.fa-refresh.fa-spin
+          span &nbsp;Carregando...
 
-      //- New channel form
-      form.newChannel(name='Channel.formChannel', ng-submit='Channel.submit()', novalidate='novalidate')
-        .form-group
-          .input-group.input-group-sm
-            input.form-control.input-sm(ng-model='Channel.newChannel.name', placeholder='Criar uma nova sala', required)
-            span.input-group-btn
-              button.btn.btn-primary
-                i.fa.fa-plus
+      div.user_list(ng-controller='UserController as User')
+        //- User list
+        a.sideBar__item(
+          ng-repeat='user in User.users',
+          ng-if='!User.loading && user.id !== currentUser.id',
+          ng-click='Index.selectUser(user)',
+          ng-class='{"is-side-bar-item-selected": user.id == selectedUser.id}'
+        )
+          span.disc(ng-class="{online: user.online}")
+          span(ng-class='{bold: user.newMessage}', ng-bind='user.name')
+        .sideBar__item(ng-if='User.loading')
+          i.fa.fa-refresh.fa-spin
+          span &nbsp;Carregando...
 
     //- Logout
     .sideBar__section.sideBar__section_bottom
@@ -38,13 +44,15 @@
   //- Chat view
   .content(ng-if='selectedChannel')
     //- Channel title
-    .content__title(ng-bind='"#" + selectedChannel.name')
+    .content__title
+      span(ng-if='selectedChannel.type === "channels"') #
+      span(ng-bind='selectedChannel.name')
 
     //- Chat messages
-    .content__chat(scroll-glue='true')
+    .content__chat#autoscroll
       ul.messages(ng-if='!Index.loadingMessages')
-        li(ng-repeat='message in Index.messages', ng-class='{"messages__message_received": message.UserId != currentUser.id, "messages__message_sent": message.UserId == currentUser.id}')
-          p(ng-bind='message.User.name')
+        li(ng-repeat='message in Index.messages | orderBy:"":true', ng-class='{"messages__message_received": message.UserId != currentUser.id, "messages__message_sent": message.UserId == currentUser.id}')
+          p(ng-bind='message.User.name', ng-if='message.User.name && selectedChannel.type === "channels"')
           span(ng-bind='message.message')
 
       .loading(ng-if='Index.loadingMessages')
@@ -60,4 +68,4 @@
   .content(ng-if='!selectedChannel')
     .nochannel
       i.fa.fa-comments-o
-      span Selecione uma sala
+      span Selecione uma sala <br> ou usuário

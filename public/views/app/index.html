@@ -7,16 +7,13 @@
         <p ng-bind="::currentUser.username"></p>
       </div>
     </div>
-    <div ng-controller="ChannelController as Channel" class="sideBar__channels"><a ng-repeat="channel in Channel.channels" ng-if="!Channel.loading" ng-click="Index.selectChannel(channel)" ng-class="{&quot;is-side-bar-item-selected&quot;: channel.id == selectedChannel.id}" class="sideBar__item"><span ng-class="{bold: channel.newMessage}" ng-bind="&quot;#&quot; + channel.name"></span></a>
-      <div ng-if="Channel.loading" class="sideBar__item"><i class="fa fa-refresh fa-spin"></i><span>&nbsp;Carregando...</span></div>
-      <form name="Channel.formChannel" ng-submit="Channel.submit()" novalidate="novalidate" class="newChannel">
-        <div class="form-group">
-          <div class="input-group input-group-sm">
-            <input ng-model="Channel.newChannel.name" placeholder="Criar uma nova sala" required="required" class="form-control input-sm"/><span class="input-group-btn">
-              <button class="btn btn-primary"><i class="fa fa-plus"></i></button></span>
-          </div>
-        </div>
-      </form>
+    <div class="sideBar__channels">
+      <div ng-controller="ChannelController as Channel" ng-if="Channel.channels.indexOf(currentUser.grupo) !== false"><a ng-repeat="channel in Channel.channels" ng-if="!Channel.loading &amp;&amp; (channel.name === currentUser.grupo || currentUser.grupo === &quot;admin&quot;)" ng-click="Index.selectChannel(channel)" ng-class="{&quot;is-side-bar-item-selected&quot;: channel.id == selectedChannel.id}" class="sideBar__item"><span ng-class="{bold: channel.newMessage}" ng-bind="&quot;#&quot; + channel.name"></span></a>
+        <div ng-if="Channel.loading" class="sideBar__item"><i class="fa fa-refresh fa-spin"></i><span>&nbsp;Carregando...</span></div>
+      </div>
+      <div ng-controller="UserController as User" class="user_list"><a ng-repeat="user in User.users" ng-if="!User.loading &amp;&amp; user.id !== currentUser.id" ng-click="Index.selectUser(user)" ng-class="{&quot;is-side-bar-item-selected&quot;: user.id == selectedUser.id}" class="sideBar__item"><span ng-class="{online: user.online}" class="disc"></span><span ng-class="{bold: user.newMessage}" ng-bind="user.name"></span></a>
+        <div ng-if="User.loading" class="sideBar__item"><i class="fa fa-refresh fa-spin"></i><span>&nbsp;Carregando...</span></div>
+      </div>
     </div>
     <div class="sideBar__section sideBar__section_bottom">
       <div class="sideBar__item sideBar__button">
@@ -25,11 +22,11 @@
     </div>
   </div>
   <div ng-if="selectedChannel" class="content">
-    <div ng-bind="&quot;#&quot; + selectedChannel.name" class="content__title"></div>
-    <div scroll-glue="true" class="content__chat">
+    <div class="content__title"><span ng-if="selectedChannel.type === &quot;channels&quot;">#</span><span ng-bind="selectedChannel.name"></span></div>
+    <div id="autoscroll" class="content__chat">
       <ul ng-if="!Index.loadingMessages" class="messages">
-        <li ng-repeat="message in Index.messages" ng-class="{&quot;messages__message_received&quot;: message.UserId != currentUser.id, &quot;messages__message_sent&quot;: message.UserId == currentUser.id}">
-          <p ng-bind="message.User.name"></p><span ng-bind="message.message"></span>
+        <li ng-repeat="message in Index.messages | orderBy:&quot;&quot;:true" ng-class="{&quot;messages__message_received&quot;: message.UserId != currentUser.id, &quot;messages__message_sent&quot;: message.UserId == currentUser.id}">
+          <p ng-bind="message.User.name" ng-if="message.User.name &amp;&amp; selectedChannel.type === &quot;channels&quot;"></p><span ng-bind="message.message"></span>
         </li>
       </ul>
       <div ng-if="Index.loadingMessages" class="loading"><i class="fa fa-refresh fa-spin"></i></div>
@@ -43,6 +40,6 @@
     </div>
   </div>
   <div ng-if="!selectedChannel" class="content">
-    <div class="nochannel"><i class="fa fa-comments-o"></i><span>Selecione uma sala</span></div>
+    <div class="nochannel"><i class="fa fa-comments-o"></i><span>Selecione uma sala <br> ou usuário</span></div>
   </div>
 </div>
