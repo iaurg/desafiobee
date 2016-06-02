@@ -9,8 +9,8 @@
 
       // Logout
       vm.logout = function() {
+        socket.emit('manual-disconnect', $rootScope.currentUser.id);
         $auth.logout().then(function() {
-          socket.emit('manual-disconnect', $rootScope.currentUser.id);
 
           localStorage.removeItem('user');
           $rootScope.authenticated = false;
