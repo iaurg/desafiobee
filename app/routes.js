@@ -26,7 +26,6 @@ module.exports = function(app, router, io) {
     });
 
     socket.on('disconnect', function(){
-      console.log(user.name, 'desconectado');
       _.remove(socketList, function(s) {
         return s.socket.id === socket.id;
       });
@@ -35,7 +34,6 @@ module.exports = function(app, router, io) {
     });
 
     socket.on('manual-disconnect', function(userId){
-      console.log(user.name, 'desconectado');
       _.remove(socketList, function(s) {
         return s.user.id === userId;
       });
