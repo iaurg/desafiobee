@@ -12,6 +12,7 @@
     'static-include',
     'btford.socket-io',
     'luegg.directives',
-    'ngAudio'
+    'ngAudio',
+    'angularMoment'
   ]);
 })();

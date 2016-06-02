@@ -52,6 +52,7 @@
     .content__chat#autoscroll
       ul.messages(ng-if='!Index.loadingMessages')
         li(ng-repeat='message in Index.messages | orderBy:"":true', ng-class='{"messages__message_received": message.UserId != currentUser.id, "messages__message_sent": message.UserId == currentUser.id}')
+          span.time(am-time-ago="message.createdAt")
           p(ng-bind='message.User.name', ng-if='message.User.name && selectedChannel.type === "channels"')
           span(ng-bind='message.message')
 

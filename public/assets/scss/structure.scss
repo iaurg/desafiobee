@@ -144,6 +144,13 @@ $sidebar-color: #FCFDFD;
           border-radius: 5px;
           margin-bottom: 15px;
 
+          .time {
+            font-size: 10px;
+            color: #666;
+            display: block;
+            margin-bottom: 5px;
+          }
+
           p {
             font-weight: bold;
             margin-bottom: 5px;

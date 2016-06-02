@@ -25,7 +25,7 @@
     <div class="content__title"><span ng-if="selectedChannel.type === &quot;channels&quot;">#</span><span ng-bind="selectedChannel.name"></span></div>
     <div id="autoscroll" class="content__chat">
       <ul ng-if="!Index.loadingMessages" class="messages">
-        <li ng-repeat="message in Index.messages | orderBy:&quot;&quot;:true" ng-class="{&quot;messages__message_received&quot;: message.UserId != currentUser.id, &quot;messages__message_sent&quot;: message.UserId == currentUser.id}">
+        <li ng-repeat="message in Index.messages | orderBy:&quot;&quot;:true" ng-class="{&quot;messages__message_received&quot;: message.UserId != currentUser.id, &quot;messages__message_sent&quot;: message.UserId == currentUser.id}"><span am-time-ago="message.createdAt" class="time"></span>
           <p ng-bind="message.User.name" ng-if="message.User.name &amp;&amp; selectedChannel.type === &quot;channels&quot;"></p><span ng-bind="message.message"></span>
         </li>
       </ul>

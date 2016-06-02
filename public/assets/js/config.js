@@ -9,6 +9,9 @@
       defaultErrorMessageResolver.setCulture('pt-br');
     })
 
+    .run(function(amMoment) {
+        amMoment.changeLocale('pt-br');
+    })
 
     /**
      * Auth config
