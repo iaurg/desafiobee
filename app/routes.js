@@ -16,6 +16,7 @@ module.exports = function(app, router, io) {
 
   io.on('connection', function(socket){
     socket.on('connection-user', function(user) {
+      console.log(user.name, 'conectado');
       socketList.push({
         user: user,
         socket: socket
@@ -25,6 +26,7 @@ module.exports = function(app, router, io) {
     });
 
     socket.on('disconnect', function(){
+      console.log(user.name, 'desconectado');
       _.remove(socketList, function(s) {
         return s.socket.id === socket.id;
       });
@@ -33,6 +35,7 @@ module.exports = function(app, router, io) {
     });
 
     socket.on('manual-disconnect', function(userId){
+      console.log(user.name, 'desconectado');
       _.remove(socketList, function(s) {
         return s.user.id === userId;
       });
@@ -158,6 +161,8 @@ module.exports = function(app, router, io) {
           if (message.ChannelId) {
             io.sockets.emit('message', message);
           } else {
+            console.log(req.decoded.id, 'para', req.body.toUserId, socketList);
+
             var fromUser = _.find(socketList, function(s) { return s.user.id === req.decoded.id });
             var toUser   = _.find(socketList, function(s) { return s.user.id === req.body.toUserId });
             if (fromUser) fromUser.socket.emit('message', message);
