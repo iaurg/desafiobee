@@ -63,7 +63,11 @@
     .content__message
       form(name='Index.formNewMessage', ng-submit='Index.sendMessage()', novalidate='novalidate')
         .form-group
-          input#message.form-control(ng-model='Index.newMessage.message', placeholder='Digite sua mensagem aqui', required, disable-validation-message)
+          .input-group
+            input#message.form-control(ng-model='Index.newMessage.message', placeholder='Digite sua mensagem aqui', required, disable-validation-message)
+            span.input-group-btn
+              button(class="btn btn-primary", type="button")
+                i.fa.fa-paperclip
 
   //- No channel selected
   .content(ng-if='!selectedChannel')

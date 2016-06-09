@@ -196,7 +196,15 @@ module.exports = function(app, router, io) {
   router.route('/channels/:id/messages')
     .get(function(req, res) {
       models.Channel.findById(req.params.id).then(function(channel) {
-        channel.getMessages({ order: [['createdAt', 'DESC']], limit: 50, include: [{ model: models.User, attributes: ['name'] }] }).then(function(messages) {
+        channel.getMessages({
+          include: [{
+            model: models.User,
+            attributes: ['name']
+          }],
+          order: [['createdAt', 'DESC']],
+          offset: req.param('offset') ? parseInt(req.param('offset')) : 0,
+          limit: 10
+        }).then(function(messages) {
           res.json(messages);
         });
       });
@@ -218,7 +226,8 @@ module.exports = function(app, router, io) {
         ]
       },
       order: [['createdAt', 'DESC']],
-      limit: 50
+      offset: req.param('offset') ? parseInt(req.param('offset')) : 0,
+      limit: 10
     }).then(function(messages) {
       res.json(messages);
     });

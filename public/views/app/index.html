@@ -34,7 +34,10 @@
     <div class="content__message">
       <form name="Index.formNewMessage" ng-submit="Index.sendMessage()" novalidate="novalidate">
         <div class="form-group">
-          <input id="message" ng-model="Index.newMessage.message" placeholder="Digite sua mensagem aqui" required="required" disable-validation-message="disable-validation-message" class="form-control"/>
+          <div class="input-group">
+            <input id="message" ng-model="Index.newMessage.message" placeholder="Digite sua mensagem aqui" required="required" disable-validation-message="disable-validation-message" class="form-control"/><span class="input-group-btn">
+              <button type="button" class="btn btn-primary"><i class="fa fa-paperclip"></i></button></span>
+          </div>
         </div>
       </form>
     </div>

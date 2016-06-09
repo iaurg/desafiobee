@@ -3,6 +3,10 @@
 @import 'structure';
 @import 'login';
 
+html {
+  overflow: hidden;
+}
+
 body {
   background: lighten($main-color, 4%);
   font: 12px "Open Sans", "Helvetica", "Arial", sans-serif;
